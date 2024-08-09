@@ -6,12 +6,16 @@ authors = ["Anil Bhatt <anilaknb@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.10.0,<3.12"
-crewai = "^0.11.0"
+crewai = "^0.41.1"
+crewai-tools = "^0.4.26"
+langchain = "^0.2.12"
+langchain-community = "^0.2.11"
+praw = "^7.7.1"
+gdown = "^5.2.0"
+numpy = "1.26"
 python-dotenv = "1.0.0"
 markdown = "3.4.3"
 pymarkdownlnt = "0.9.15"
-gdown = "^5.2.0"
-numpy = "1.26"
 
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
