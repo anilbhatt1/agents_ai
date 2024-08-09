@@ -1,80 +1,77 @@
-import sys
-from crewai import Agent, Task
-from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
-from MarkdownTools import markdown_validation_tool
-
-load_dotenv()
-
 llm = ChatOpenAI(
     model="crewai-llama3.1",
     base_url="http://localhost:11434/v1",
     openai_api_key="NA"
 )
 
-def process_markdown_document(filename):
-    """
-    Processes a markdown document by reviewing its syntax validation 
-    results and providing feedback on necessary changes.
+import os
+from crewai import Agent, Task, Crew, Process
+from langchain_openai import ChatOpenAI
+from decouple import config
 
-    Args:
-        filename (str): The path to the markdown file to be processed.
+from textwrap import dedent
+from agents import CustomAgents
+from tasks import CustomTasks
 
-    Returns:
-        str: The list of recommended changes to make to the document.
+# Install duckduckgo-search for this example:
+# !pip install -U duckduckgo-search
 
-    """
+from langchain.tools import DuckDuckGoSearchRun
 
-    # Define general agent
-    general_agent  = Agent(role='Requirements Manager',
-                    goal="""Provide a detailed list of the markdown 
-                            linting results. Give a summary with actionable 
-                            tasks to address the validation results. Write your 
-                            response as if you were handing it to a developer 
-                            to fix the issues.
-                            DO NOT provide examples of how to fix the issues or
-                            recommend other tools to use.""",
-                    backstory="""You are an expert business analyst 
-					and software QA specialist. You provide high quality, 
-                    thorough, insightful and actionable feedback via 
-                    detailed list of changes and actionable tasks.""",
-                    allow_delegation=False, 
-                    verbose=True,
-                    tools=[markdown_validation_tool],
-                    llm=llm)
+search_tool = DuckDuckGoSearchRun()
+
+os.environ["OPENAI_API_KEY"] = config("OPENAI_API_KEY")
+os.environ["OPENAI_ORGANIZATION"] = config("OPENAI_ORGANIZATION_ID")
+
+# This is the main class that you will use to define your custom crew.
+# You can define as many agents and tasks as you want in agents.py and tasks.py
+
+class CustomCrew:
+    def __init__(self, var1, var2):
+        self.var1 = var1
+        self.var2 = var2
+
+    def run(self):
+        # Define your custom agents and tasks in agents.py and tasks.py
+        agents = CustomAgents()
+        tasks = CustomTasks()
+
+        # Define your custom agents and tasks here
+        custom_agent_1 = agents.agent_1_name()
+        custom_agent_2 = agents.agent_2_name()
+
+        # Custom tasks include agent name and variables as input
+        custom_task_1 = tasks.task_1_name(
+            custom_agent_1,
+            self.var1,
+            self.var2,
+        )
+
+        custom_task_2 = tasks.task_2_name(
+            custom_agent_2,
+        )
+
+        # Define your custom crew here
+        crew = Crew(
+            agents=[custom_agent_1, custom_agent_2],
+            tasks=[custom_task_1, custom_task_2],
+            verbose=True,
+        )
+
+        result = crew.kickoff()
+        return result
 
 
-    # Define Tasks Using Crew Tools
-    syntax_review_task = Task(description=f"""
-			Use the markdown_validation_tool to review 
-			the file(s) at this path: {filename}
-            
-			Be sure to pass only the file path to the markdown_validation_tool.
-			Use the following format to call the markdown_validation_tool:
-			Do I need to use a tool? Yes
-			Action: markdown_validation_tool
-			Action Input: {filename}
-
-			Get the validation results from the tool 
-			and then summarize it into a list of changes
-			the developer should make to the document.
-            DO NOT recommend ways to update the document.
-            DO NOT change any of the content of the document or
-            add content to it. It is critical to your task to
-            only respond with a list of changes.
-			
-			If you already know the answer or if you do not need 
-			to use a tool, return it as your Final Answer.""",
-            agent=general_agent)
-    
-    updated_markdown = syntax_review_task.execute()
-
-    return updated_markdown
-
-# If called directly from the command line take the first argument as the filename
+# This is the main function that you will use to run your custom crew.
 if __name__ == "__main__":
+    print("## Welcome to Crew AI Template")
+    print("-------------------------------")
+    var1 = input(dedent("""Enter variable 1: """))
+    var2 = input(dedent("""Enter variable 2: """))
 
-    if len(sys.argv) > 1:
-        filename = sys.argv[1]
-        processed_document = process_markdown_document(filename)
-        print(processed_document)
+    custom_crew = CustomCrew(var1, var2)
+    result = custom_crew.run()
+    print("\n\n########################")
+    print("## Here is you custom crew run result:")
+    print("########################\n")
+    print(result)
