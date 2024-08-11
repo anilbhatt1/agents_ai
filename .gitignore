@@ -1,4 +1,8 @@
 .env
 .venv
 .venv/
+api_keys.json
+*.json
+*.txt
 **/__pycache__/
+wom/src/.ipynb_checkpoints/

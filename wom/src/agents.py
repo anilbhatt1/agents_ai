@@ -9,9 +9,17 @@ from langchain_openai import ChatOpenAI
 
 class PostRankingAgents:
     def __init__(self):
-        self.openai_gpt35 = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7)
-        self.openai_gpt4 = ChatOpenAI(model_name="gpt-4", temperature=0.7)        
-        self.llama31_8b = Ollama(model='llama3.1:8b')
+        self.api_file_path = 'api_keys.json'
+        with open(json_file_path, 'r') as file:
+            self.api_keys = json.load(file)        
+        self.openai_gpt35 = ChatOpenAI(model_name="gpt-3.5-turbo", 
+                                       temperature=0.7,
+                                       openai_api_key=self.api_keys['openai'])
+        self.openai_gpt4 = ChatOpenAI(model_name="gpt-4", 
+                                      temperature=0.7,
+                                      openai_api_key=self.api_keys['openai'])        
+        self.llama31_8b = Ollama(model='llama3.1:8b',
+                                 openai_api_key=self.api_keys['ollama'])
     
     def agent_1_name(self):
         return Agent(
