@@ -103,6 +103,24 @@ def fetch_reddit():
             reddit_posts[subreddit_name][keyword] = posts
             reddit_post_ids.extend(post_ids)
     
+    return reddit_posts, reddit_post_ids
+
+# To limit records for testing purpose
+def fetch_reddit_test():
+    
+    reddit_posts = {}
+    reddit_post_ids = []
+    
+    all_subreddits = ['AmateurInteriorDesign']
+    gemini_generated_keywords = ["interior design"]
+
+    for subreddit_name in all_subreddits:
+        reddit_posts[subreddit_name] = {}
+        for keyword in gemini_generated_keywords:
+            posts, post_ids = search_posts(subreddit_name, keyword)    
+            reddit_posts[subreddit_name][keyword] = posts
+            reddit_post_ids.extend(post_ids)
+    
     return reddit_posts, reddit_post_ids 
 
 def condense_data(reddit_posts, reddit_post_ids):
