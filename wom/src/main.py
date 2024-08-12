@@ -12,38 +12,50 @@ from crewai import Agent, Task, Crew, Process
 from langchain_openai import ChatOpenAI
 
 from textwrap import dedent
-from tasks import CustomTasks
+from agents import *
+from tasks import *
 from reddit_helper import *    
 
-class CustomCrew:
-    def __init__(self, var1, var2):
-        self.var1 = var1
-        self.var2 = var2
+class Analysis_and_ScoringCrew:
+    def __init__(self):
+        with open(self.cfg_file_path, 'r') as yaml_file:
+            self.cfg = yaml.safe_load(yaml_file)
+        self.product_long = self.cfg.get('product_long_description', '')      
+        self.product_short = self.cfg.get('product_short_description', '')        
 
     def run(self):
         # Define your custom agents and tasks in agents.py and tasks.py
-        agents = CustomAgents()
-        tasks = CustomTasks()
+        agents = PostRankingAgents()
+        tasks = PostRankingTasks()
 
-        # Define your custom agents and tasks here
-        custom_agent_1 = agents.agent_1_name()
-        custom_agent_2 = agents.agent_2_name()
+        content_analysis_agent    = agents.content_analysis_agent()
+        engagement_analysis_agent = agents.engagement_analysis_agent()
+        relevance_analysis_agent  = agents.relevance_analysis_agent()
+        content_review_agent      = agents.content_review_supervisor_agent()
 
         # Custom tasks include agent name and variables as input
-        custom_task_1 = tasks.task_1_name(
-            custom_agent_1,
-            self.var1,
-            self.var2,
+        content_analysis_task = tasks.content_analysis_task(
+            content_analysis_agent,
         )
 
-        custom_task_2 = tasks.task_2_name(
-            custom_agent_2,
+        engagement_analysis_task = tasks.engagement_analysis_task(
+            engagement_analysis_agent,
         )
+        
+        relevance_analysis_task = tasks.relevance_analysis_task(
+            relevance_analysis_agent,
+        )
+        
+        final_scoring_task = tasks.supervisor_review_task(
+            content_review_agent,
+        )        
 
         # Define your custom crew here
         crew = Crew(
-            agents=[custom_agent_1, custom_agent_2],
-            tasks=[custom_task_1, custom_task_2],
+            agents=[content_analysis_agent, engagement_analysis_agent, relevance_analysis_agent,
+                    content_review_agent],
+            tasks=[content_analysis_task, engagement_analysis_task, relevance_analysis_task,
+                   final_scoring_task],
             verbose=True,
         )
 
@@ -59,7 +71,6 @@ if __name__ == "__main__":
     reddit_posts, reddit_post_ids = fetch_reddit()
     condensed_reddit_data, unique_post_ids, unique_comment_ids = condense_data(reddit_posts, reddit_post_ids)
 
-    print(len(condensed_reddit_data))
-    # custom_crew = CustomCrew(var1, var2)
-    # result = custom_crew.run()
-    # print(result)
+    analysis_scoring_crew = Analysis_and_ScoringCrew()
+    scoring_result = analysis_scoring_crew.run()
+    print(scoring_result)

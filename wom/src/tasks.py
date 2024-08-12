@@ -9,7 +9,7 @@ class ScoreOutput(BaseModel):
     score: float
     justification: str
 
-class CustomTasks:
+class PostRankingTasks:
     def __init__(self):
         with open(self.cfg_file_path, 'r') as yaml_file:
             self.cfg = yaml.safe_load(yaml_file)
@@ -38,12 +38,11 @@ class CustomTasks:
         )
 
     def engagement_analysis_task(self, agent):
-        
-        descr = "Analyze posts and associated comments from {input} to determine their relevance based on \
-        identified keywords and phrases w.r.to the marketing of {self.product_long}. Then provide a score \
-        of 10 for each post and comment and provide a justification for each score. {self.tip_text}"
-        
-        expected_out = "JSON with comment_id, relevance score, and a brief justification (less than 15 words) \
+        descr = "Evaluating the level of user interaction with the provided content from {input}. This includes\
+        analyzing metrics such as likes, shares, comments, and views to calculate an overall engagement score. \
+        {self.tip_text}"       
+       
+        expected_out = "JSON with comment_id, engagement score, and a brief justification (less than 15 words) \
                         explaining the rationale behind the score for each post and its associated comments.", 
         
         return Task(
@@ -55,10 +54,10 @@ class CustomTasks:
     
     def relevance_analysis_task(self, agent):
         
-        descr = "Analyze posts and associated comments from {input} to determine their relevance based on \
-        identified keywords and phrases w.r.to the marketing of {self.product_long}. Then provide a score \
-        of 10 for each post and comment and provide a justification for each score. {self.tip_text}"
-        
+        descr = "Assess how well the content in {input} aligns with {self.product_long}. The goal is to assign a \
+        relevance score that reflects the content’s pertinence to its intended audience and its  \
+        alignment with the product that is marketed. {self.tip_text}"        
+       
         expected_out = "JSON with comment_id, relevance score, and a brief justification (less than 15 words) \
                         explaining the rationale behind the score for each post and its associated comments.", 
         
@@ -71,11 +70,12 @@ class CustomTasks:
         
     def supervisor_review_task(self, agent):
         
-        descr = "Analyze posts and associated comments from {input} to determine their relevance based on \
-        identified keywords and phrases w.r.to the marketing of {self.product_long}. Then provide a score \
-        of 10 for each post and comment and provide a justification for each score. {self.tip_text}"
-        
-        expected_out = "JSON with comment_id, relevance score, and a brief justification (less than 15 words) \
+        descr = "You will get outputs from Content Analysis, Engagement Analysis, and Relevance Analysis agents. \
+        You will also get content from {input}. You will review the outputs from these agents and the content and \
+        provide a final score for each post and comment based on the relevance to the marketing of \
+        {self.product_long}. {self.tip_text}    "        
+       
+        expected_out = "JSON with comment_id, relevance score, and a brief justification (less than 30 words) \
                         explaining the rationale behind the score for each post and its associated comments.", 
         
         return Task(
