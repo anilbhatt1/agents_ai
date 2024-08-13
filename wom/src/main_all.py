@@ -13,9 +13,6 @@ from langchain_openai import ChatOpenAI
 
 from pydantic import BaseModel
 
-reddit_posts, reddit_post_ids = fetch_reddit_test()
-condensed_reddit_data, unique_post_ids, unique_comment_ids = condense_data(reddit_posts, reddit_post_ids)
-
 api_file_path = 'api_keys.json'
 with open(api_file_path, 'r') as file:
     api_keys = json.load(file)        
@@ -101,7 +98,7 @@ identified keywords and phrases w.r.to the marketing of {product_long}. Then pro
 of 10 for each post and comment and provide a justification for each score. {tip_text}"
 
 expected_out = "JSON with comment_id, relevance score, and a brief justification (less than 15 words) \
-                explaining the rationale behind the score for each post and its associated comments.", 
+                explaining the rationale behind the score for each post and its associated comments." 
         
 content_analysis_task = Task(
                             description=descr,
@@ -115,7 +112,7 @@ analyzing metrics such as likes, shares, comments, and views to calculate an ove
 {tip_text}"       
 
 expected_out = "JSON with comment_id, engagement score, and a brief justification (less than 15 words) \
-                explaining the rationale behind the score for each post and its associated comments.", 
+                explaining the rationale behind the score for each post and its associated comments." 
 
 engagement_analysis_task =  Task(
                                 description=descr,
@@ -129,7 +126,7 @@ relevance score that reflects the content’s pertinence to its intended audienc
 alignment with the product that is marketed. {tip_text}"        
 
 expected_out = "JSON with comment_id, relevance score, and a brief justification (less than 15 words) \
-                explaining the rationale behind the score for each post and its associated comments.", 
+                explaining the rationale behind the score for each post and its associated comments." 
         
 relevance_analysis_task = Task(
                                 description=descr,
@@ -144,7 +141,7 @@ and provide a final score for each post and comment based on the relevance to th
 {product_long}. {tip_text}"        
        
 expected_out = "JSON with comment_id, relevance score, and a brief justification (less than 30 words) \
-                explaining the rationale behind the score for each post and its associated comments.", 
+                explaining the rationale behind the score for each post and its associated comments." 
         
 final_scoring_task = Task(
             description=descr,
@@ -160,6 +157,9 @@ response_creation_crew = Crew(
             final_scoring_task],
     verbose=True,
 )
+
+reddit_posts, reddit_post_ids = fetch_reddit_test()
+condensed_reddit_data, unique_post_ids, unique_comment_ids = condense_data(reddit_posts, reddit_post_ids)
 
 input_dict = {"input_data": condensed_reddit_data}
 

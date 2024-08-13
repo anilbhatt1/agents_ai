@@ -32,7 +32,7 @@ def search_posts(subreddit_name, keyword):
     posts = []
     post_ids = []
     subreddit = reddit.subreddit(subreddit_name)
-    for post in subreddit.search(keyword, limit=10):
+    for post in subreddit.search(keyword):
         post_data = {
             'title': post.title,
             "comment_id": post.id,
