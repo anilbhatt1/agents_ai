@@ -32,7 +32,7 @@ def search_posts(subreddit_name, keyword):
     posts = []
     post_ids = []
     subreddit = reddit.subreddit(subreddit_name)
-    for post in subreddit.search(keyword):
+    for post in subreddit.search(keyword, limit=10):
         post_data = {
             'title': post.title,
             "comment_id": post.id,
@@ -91,7 +91,7 @@ def fetch_reddit():
     all_subreddits = []
     for each in found_subreddits:
         all_subreddits.extend(each)
-    all_subreddits = set(all_subreddits)
+    all_subreddits = set(all_subreddits)    
 
     reddit_posts = {}
     reddit_post_ids = []
@@ -111,8 +111,8 @@ def fetch_reddit_test():
     reddit_posts = {}
     reddit_post_ids = []
     
-    all_subreddits = ['AmateurInteriorDesign']
-    gemini_generated_keywords = ["interior design"]
+    all_subreddits = ['InteriorDesign']
+    gemini_generated_keywords = ["Room Style Transformation"]
 
     for subreddit_name in all_subreddits:
         reddit_posts[subreddit_name] = {}
