@@ -48,9 +48,13 @@ def search_posts(subreddit_name, keyword):
         }
 
         # Check for images in the post
-        if hasattr(post, 'url') and (post.url.endswith('.jpg') or post.url.endswith('.png')):
+        if hasattr(post, 'url') and \
+           ((post.url.endswith('.jpg') or post.url.endswith('.jpeg') or post.url.endswith('.png'))):
+            
             post_data['image_urls'].append(post.url)
+        
         elif hasattr(post, 'media_metadata'):
+            
             for item_id in post.media_metadata:
                 media_item = post.media_metadata[item_id]
                 if 'm' in media_item and 'image' in media_item['m']:
@@ -153,6 +157,7 @@ def condense_data(reddit_posts, reddit_post_ids):
                         'text': post['title'],
                         'author': post['author'],
                         'score': post['score'],
+                        'created_utc': post['created_utc'],
                     }]
                     unique_post_ids.add(post['comment_id'])
                     for comment in post['comments']:
@@ -167,6 +172,7 @@ def condense_data(reddit_posts, reddit_post_ids):
                                 'text': comment['text'],
                                 'author': comment['author'],
                                 'score': comment['score'],
+                                'created_utc': post['created_utc'],
                             }                    
                             post_comments.append(comment_data)
                             unique_comment_ids.add(comment['comment_id'])
@@ -181,4 +187,3 @@ def condense_data(reddit_posts, reddit_post_ids):
     print(f'Cross_ck: {len(unq_reddit_post_ids)} = {unq_post_cnt}')
     
     return condensed_data, unique_post_ids, unique_comment_ids
-
