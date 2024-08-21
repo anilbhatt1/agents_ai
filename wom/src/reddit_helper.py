@@ -106,7 +106,7 @@ def fetch_reddit():
             posts, post_ids = search_posts(subreddit_name, keyword)    
             reddit_posts[subreddit_name][keyword] = posts
             reddit_post_ids.extend(post_ids)
-    
+    #
     return reddit_posts, reddit_post_ids
 
 # To limit records for testing purpose
