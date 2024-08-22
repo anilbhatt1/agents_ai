@@ -1,0 +1,31 @@
+content_filter_task:
+  description: >
+    {comment_id} is the id of the comment that you need to provide decision and justification. You will 
+    get the data in {input_data}.
+    You should: 
+      - Analyze this and determine relevance of {comment_id} with respect to {domain} 
+      - You should check whether comment is seeking information/guidance/advise or giving a suggestion or 
+        asking a question that comes under the scope of {product_short}. Such comments should be identified 
+        as relevant.
+        Example : "In some situations, i agree with you. Emptiness is better than extra things in the room.
+        But i think in this case, it would be better to have something on the wall."              
+      - Bot messages that has URLs are irrelevant
+        Example : "Looks like the Crate and Barrel Cortez Natural Floating Dresser. https://www.crate.com"
+      - Short messages that are not questions or requests or suggestions(less than 15 words) are irrelevant
+      - Merely expressing positive sentiment, interest or appreciations alone without any follow-up questions or 
+        requests are irrelevant
+        Example : "THATS WILD!!!!!"
+        Example : "Pairing the electric blue and maroon together is an absolute power move, and you have my respect."
+        Example : "Nice tannoys! I've wish they were more available in the states."
+        Example : "Your style is DELICIOUS!!!!!!!!"              
+      - Mere statements/opinions without any follow-up questions or requests or suggestions are irrelevant
+        Example : "The overhead/pendulum lighting looks perfect."
+        Example : "this is the dream"
+        Example : "The detail on your ceiling is absolutely lovely"
+      - Questions on purchasing stuff not under scope of {product_short} are irrelevant
+        Example : "I love that dachshund statue, do you by chance know where one could be bought?
+      - Offensive messages or messages with foul language are irrelevant
+      - If relevant populate 'relevant' against 'decision' key of json output, else pass 'discard'. 
+        {tip_text}
+  expected_out: >
+    comment id, decision and a brief justification (less than 15 words) explaining the rationale behind the decision
