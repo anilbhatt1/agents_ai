@@ -24,6 +24,8 @@ content_filter_task:
         Example : "The detail on your ceiling is absolutely lovely"
       - Questions on purchasing stuff not under scope of {product_short} are irrelevant
         Example : "I love that dachshund statue, do you by chance know where one could be bought?
+      - Very short messages with less than 7 words are irrelevant and should be discarded.
+        Examples : "Uhhh", "I dig it", "Yes","No", "Oo agreed!"
       - Offensive messages or messages with foul language are irrelevant
       - If relevant populate 'relevant' against 'decision' key of json output, else pass 'discard'. 
         {tip_text}
