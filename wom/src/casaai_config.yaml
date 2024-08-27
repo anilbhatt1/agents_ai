@@ -23,5 +23,6 @@ product_long_description: CasaAI - next generation tool for transforming interio
   This app uses advanced AI to reimagine any room based on style and functional
   needs of user.
 product_short_description: CasaAI - next generation AI tool for transforming interior spaces.
+product_name: CasaAI
 domain: Interior design
 output_format_1: ^^comment_id^^decision^^justification

@@ -43,6 +43,15 @@ content_scoring_task:
     intended audience and its alignment with the product that is marketed and also the {domain}.
       Example: 3.2, 5.9, 8.6, 9.9, 10.0
     - Description of product that we are targeting to market is {product_long}
+    - Few pointers are as below:
+      - Comments that seek for help or advise or guidance to transform the spaces should be scored higher
+        Example : "Love everything about it. I just bought a house and want to do bold stuff like this, 
+        but don't really know where to start."
+      - Comments that ask for purchasing items that cannot be supplied by {product_name} should be scored
+        lower.
+        Example : "Where are your beautiful blinds from??"
+        Example : "looks great! where is the dresser from?"
+        Example : "Where did you get your chairs? I really like them!"
   expected_out: >
     comment id, score and a brief justification (less than 15 words) explaining the rationale 
     behind the score
