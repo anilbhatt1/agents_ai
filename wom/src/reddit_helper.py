@@ -41,6 +41,7 @@ def search_posts(subreddit_name, keyword):
     post_ids = []
     subreddit = reddit.subreddit(subreddit_name)
     for post in subreddit.search(keyword, limit=19):
+        age = calculate_comment_age(post.created_utc)
         post_data = {
             'title': post.title,
             "comment_id": post.id,
@@ -51,7 +52,7 @@ def search_posts(subreddit_name, keyword):
             'upvote_ratio': post.upvote_ratio,
             'author': str(post.author),
             'created_utc': post.created_utc,
-            'age': 0.1,
+            'age': age,
             'image_urls': [],
             'comments': []
         }
