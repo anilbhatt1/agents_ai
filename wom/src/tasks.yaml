@@ -58,4 +58,40 @@ content_scoring_task:
     comment id, score and a brief justification (less than 15 words) explaining the rationale 
     behind the score
 
+response_writing_task:
+  description: >
+    -Comments you are getting as input are suggestions/advises to the help seeked in title or may be 
+    follow-up questions to understand the ask better
+    -Read the comments from input and understand whether it is a suggestion/advise/follow-up question
+    -Once done, draft text based on the type of comment
+    -Reply should sound genuine and in-synch with the overall thread of discussion.
+    -Response style must be crisp, casual, friendly and must not include any reference to the product
+    -Please include keywords mentioned in the original comment in your response text
+    -Please be careful not to include keywords that were NOT mentioned in the original comment in your 
+    response text
+    -Insert marketing text for the {product} in between these casual replies
+    -Marketing text inserted must feel natural and in-synch and must not exceed 25 words
+    -If needed, inlcude the link to the product website
+    -Input data to be used is {input_data}
+    -Response you drafted will be sent to meta reviewer for critic review
+    -You have to refine the response based on review comments from meta reviewer and create the output
+    -For output, include the 'Comment_id' and 'text' that you modified after review
+    -You are the one responsible for providing final output after taking care of review comments
+    -Please ensure that final output you are providing has reply for each comment provided in input_data
+  expected_out: >
+    comment id, drafted response
+
+response_review_task:
+  description: >
+    -You are getting the casual replies drafted by response writer agent
+    -These casual replies also has marketing text inserted for the {product} in between
+    -Review these casual replies considering below points:
+        - optimize content for search engines, ensuring that it ranks well and attracts organic traffic
+        - marketing message is catchy and gets attention
+        - There are no offensive words or content in the message
+    -Make sure your suggestion is concise (within 3 bullet points), concrete and to the point
+    -For output, include the 'Comment_id' and 'review_comment' 
+    -Your review comments will be taken care by response writer agent.
+  expected_out: >
+    comment id, review feedback
 
