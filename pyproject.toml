@@ -6,8 +6,8 @@ authors = ["Anil Bhatt <anilaknb@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.10.0,<3.12"
-crewai = "^0.41.1"
-crewai-tools = "^0.4.26"
+crewai = "^0.51.1"
+crewai-tools = "^0.8.3"
 langchain = "^0.2.12"
 langchain-community = "^0.2.11"
 praw = "^7.7.1"

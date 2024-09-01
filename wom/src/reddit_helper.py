@@ -1,6 +1,7 @@
 import yaml
 import json
 import praw
+from datetime import datetime, timedelta
 
 api_file_path = 'api_keys.json'
 
@@ -22,6 +23,13 @@ gemini_generated_keywords = cfg.get('gemini_generated_keywords', [])
 user_provided_keywords = cfg.get('user_provided_keywords', [])
 broad_keywords = cfg.get('broad_keywords', [])
 
+def calculate_comment_age(unix_timestamp):
+    date_obj = datetime.utcfromtimestamp(unix_timestamp)
+    current_date = datetime.utcnow()
+    difference_in_days = (current_date - date_obj).days
+    age_in_years = round(difference_in_days / 365.25, 5)
+    return age_in_years
+
 def search_subreddits(keyword):
     subreddits = []
     for subreddit in reddit.subreddits.search_by_name(keyword, exact=False):
@@ -32,7 +40,7 @@ def search_posts(subreddit_name, keyword):
     posts = []
     post_ids = []
     subreddit = reddit.subreddit(subreddit_name)
-    for post in subreddit.search(keyword, limit=10):
+    for post in subreddit.search(keyword, limit=19):
         post_data = {
             'title': post.title,
             "comment_id": post.id,
@@ -43,6 +51,7 @@ def search_posts(subreddit_name, keyword):
             'upvote_ratio': post.upvote_ratio,
             'author': str(post.author),
             'created_utc': post.created_utc,
+            'age': 0.1,
             'image_urls': [],
             'comments': []
         }
@@ -65,6 +74,7 @@ def search_posts(subreddit_name, keyword):
         # Fetching comments
         post.comments.replace_more(limit=0)
         for comment in post.comments.list():
+            age = calculate_comment_age(comment.created_utc)
             comment_data = {
                 "comment_id": comment.id,
                 "parent_id": comment.parent_id.split('_')[1],
@@ -72,6 +82,7 @@ def search_posts(subreddit_name, keyword):
                 "author": str(comment.author),
                 "score": comment.score,
                 "created_utc": comment.created_utc,
+                "age": age,
                 "image_url": ""
             }
 
@@ -158,6 +169,7 @@ def condense_data(reddit_posts, reddit_post_ids):
                         'author': post['author'],
                         'score': post['score'],
                         'created_utc': post['created_utc'],
+                        'age': post['age'],
                     }]
                     unique_post_ids.add(post['comment_id'])
                     for comment in post['comments']:
@@ -172,7 +184,8 @@ def condense_data(reddit_posts, reddit_post_ids):
                                 'text': comment['text'],
                                 'author': comment['author'],
                                 'score': comment['score'],
-                                'created_utc': post['created_utc'],
+                                'created_utc': comment['created_utc'],
+                                'age': comment['age'],
                             }                    
                             post_comments.append(comment_data)
                             unique_comment_ids.add(comment['comment_id'])
