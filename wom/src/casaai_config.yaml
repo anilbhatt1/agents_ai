@@ -24,5 +24,6 @@ product_long_description: CasaAI - next generation tool for transforming interio
   needs of user.
 product_short_description: CasaAI - next generation AI tool for transforming interior spaces.
 product_name: CasaAI
+product_url: casai.delvelabs.ai
 domain: Interior design
 output_format_1: ^^comment_id^^decision^^justification

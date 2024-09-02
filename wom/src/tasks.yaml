@@ -40,58 +40,76 @@ content_scoring_task:
     {input_data}. You should:
     - Analyse the {comment_id} and assess the business success probability of marketing the product by
       replying to this comment
-    - Based on the assessment, assign a score out of 10 that reflects the content’s pertinence to its 
-    intended audience and its alignment with the product that is marketed and also the {domain}.
-      Example: 3.2, 5.9, 8.6, 9.9, 10.0
-    - Description of product that we are targeting to market is {product_long}
+    - Based on the assessment, assign a score using a 1-10 scale
+      - Score reflects the comment's alignment with the product that is marketed and also the {domain}.
+      - Score 1 is the lowest and 10 is the highest
+      Example: 0.5, 3.2, 5.9, 8.6, 9.9, 10.0
+      - Scale:
+        0-3.9 : Poor - Useless for marketing 
+        4-6.9 : Average - Comment has some useful points
+        7-8.9 : Good - Comment has good points ideal for marketing pitch.
+        9-10  : Excellent - The comment is exemplary in achieving the marketing purpose.         
     - Few pointers for scoring are as below:
-      - Comments that seek for help or advise or guidance to transform the spaces should be scored higher
-        Example : "Love everything about it. I just bought a house and want to do bold stuff like this, 
+      - Comments that seek for help/advise/guidance that comes under the capabilities of {product_name} (eg: transform 
+      the spaces) should be scored good or above.
+        Example : "Love everything about it. I just bought a house and want to change the style to a different one, 
         but don't really know where to start."
-      - Comments that ask for purchasing items that cannot be supplied by {product_name} should be scored
-        lower.
+      - Comments that discuss about matters not coming under the capabilities of {product_name} (eg: purchasing items, 
+        source of some items) should be scored average or low.
         Example : "Where are your beautiful blinds from??"
         Example : "looks great! where is the dresser from?"
         Example : "Where did you get your chairs? I really like them!"
-      - Comments that are older than 1 year should get lower score
+      - Comments that are older than 1 year should get average score
+    - Description of {product_name} that we are marketing is {product_long}
+    {tip_text}
   expected_out: >
     comment id, score and a brief justification (less than 15 words) explaining the rationale 
     behind the score
 
 response_writing_task:
   description: >
-    -Comments you are getting as input are suggestions/advises to the help seeked in title or may be 
-    follow-up questions to understand the ask better
+    -{comment_id} is the id of the comment that you need to respond 
+    -You will also get the context behind the comment 
+    -Comments you are getting as input are suggestions/advises/follow-up questions
     -Read the comments from input and understand whether it is a suggestion/advise/follow-up question
-    -Once done, draft text based on the type of comment
-    -Reply should sound genuine and in-synch with the overall thread of discussion.
-    -Response style must be crisp, casual, friendly and must not include any reference to the product
-    -Please include keywords mentioned in the original comment in your response text
-    -Please be careful not to include keywords that were NOT mentioned in the original comment in your 
-    response text
-    -Insert marketing text for the {product} in between these casual replies
-    -Marketing text inserted must feel natural and in-synch and must not exceed 25 words
-    -If needed, inlcude the link to the product website
-    -Input data to be used is {input_data}
-    -Response you drafted will be sent to meta reviewer for critic review
-    -You have to refine the response based on review comments from meta reviewer and create the output
-    -For output, include the 'Comment_id' and 'text' that you modified after review
-    -You are the one responsible for providing final output after taking care of review comments
-    -Please ensure that final output you are providing has reply for each comment provided in input_data
+    -Once done, draft response based on the type of comment
+    -Response should sound genuine and in-synch with the overall thread of discussion
+    -Response style must be casual, friendly and must not include any cooked-up facts
+    -Include keywords mentioned in the original comment in response
+    -Be careful not to include matters that were NOT mentioned in the original comment in  
+    response 
+    -Insert marketing text for the {product_name} in between these casual text
+    -Marketing text needs to be less than 30-35 words and must feel natural and in-synch
+    -Marketing text doesn't mention features or capabilities that {product_name} doesn't possess
+    -If needed, inlcude the link to the product website given in {product_url}
+    -Overall response including marketing text is less than 90 words
+    -Comment for which response to be drafted is {input_data}
+    -Context behind the input comment is {context}
+    -Description of {product_name} is : {product_long}
+    -{tip_text}
   expected_out: >
     comment id, drafted response
 
 response_review_task:
   description: >
-    -You are getting the casual replies drafted by response writer agent
-    -These casual replies also has marketing text inserted for the {product} in between
-    -Review these casual replies considering below points:
-        - optimize content for search engines, ensuring that it ranks well and attracts organic traffic
-        - marketing message is catchy and gets attention
-        - There are no offensive words or content in the message
-    -Make sure your suggestion is concise (within 3 bullet points), concrete and to the point
-    -For output, include the 'Comment_id' and 'review_comment' 
-    -Your review comments will be taken care by response writer agent.
+    -You are getting the casual responses drafted by response writer agent
+    -You will also get the context behind these responses
+    -These casual responses also has marketing text inserted for the {product_name} 
+    -Review these responses. Few pointers to consider:
+        -optimize content for search engines, ensuring that it ranks well and attracts organic 
+        traffic
+        -marketing message is catchy, gets attention and less than 30-35 words
+        -marketing message doesn't mention about features or capabilities that {product_name} doesn't
+        possess
+        -There are no offensive words or content in the message
+        -Overall response including marketing text is less than 90 words
+    -Review comments should be detailed with list of changes and actionable tasks
+    -Review comments will be taken care by response writer agent
+    -Original comment against which response is drafted is {input_data}
+    -Context behind this comment is {context}
+    -Description of {product_name} is : {product_long}
+    -{tip_text}
   expected_out: >
-    comment id, review feedback
+    A detailed review report that include comment id and review comments that response writer can
+    understand and act upon
 

@@ -40,7 +40,7 @@ def search_posts(subreddit_name, keyword):
     posts = []
     post_ids = []
     subreddit = reddit.subreddit(subreddit_name)
-    for post in subreddit.search(keyword, limit=19):
+    for post in subreddit.search(keyword, limit=20):
         age = calculate_comment_age(post.created_utc)
         post_data = {
             'title': post.title,
